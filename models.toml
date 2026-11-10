@@ -1,0 +1,73 @@
+# Model registry. Every provider is reached via its OpenAI-compatible endpoint.
+# Check the ids your key can use with:  python -m mcp_injection_eval.run --list-models <key>
+
+[gemini-flash]                      # free tier; pinned version (not *-latest) for reproducibility
+base_url = "https://generativelanguage.googleapis.com/v1beta/openai/"
+api_key_env = "GEMINI_API_KEY"
+model = "gemini-3.6-flash"   # 3.7/3.8 timed out or 503 on free tier (2026-11-08)
+min_interval = 13.0   # free tier: 5 RPM -> 1 call / 13 s (RPD is low too)
+
+[gemini-flash-lite]                 # free tier, smaller model
+base_url = "https://generativelanguage.googleapis.com/v1beta/openai/"
+api_key_env = "GEMINI_API_KEY"
+model = "gemini-3.5-flash-lite"
+min_interval = 5.0   # free tier: 15 RPM -> 1 call / 5 s
+
+[gemma-26b]                         # open-weights model served by the Gemini API
+base_url = "https://generativelanguage.googleapis.com/v1beta/openai/"
+api_key_env = "GEMINI_API_KEY"
+model = "gemma-4-26b-a4b-it"   # 31b returned HTTP 500 (2026-11-08)
+min_interval = 7.0   # free tier: 30 RPM but only 16K tokens/min (~1.5K tokens/call)
+
+[nemotron-lightning]                # NVIDIA build.nvidia.com free credits; ~30B MoE (3B active)
+base_url = "https://integrate.api.nvidia.com/v1"
+api_key_env = "NVIDIA_API_KEY"
+model = "nvidia/nemotron-3.5-lightning-30b-a3b"
+min_interval = 2.0                  # other NVIDIA models: 404 or timeouts for this account (2026-11-08)
+
+# OpenRouter free models (":free"): small daily/minute caps, keep the grid small
+[or-nemotron-ultra]                 # 550B MoE (55B active)
+base_url = "https://openrouter.ai/api/v1"
+api_key_env = "OPENROUTER_API_KEY"
+model = "nvidia/nemotron-3-ultra-550b-a55b:free"
+min_interval = 4.0
+
+[or-lfm-2-6b]                       # tiny model (2.6B)
+base_url = "https://openrouter.ai/api/v1"
+api_key_env = "OPENROUTER_API_KEY"
+model = "liquid/lfm-2.5-2.6b:free"
+min_interval = 4.0
+
+[or-lfm-1-7b]                       # tiny model (1.7B), newer generation
+base_url = "https://openrouter.ai/api/v1"
+api_key_env = "OPENROUTER_API_KEY"
+model = "liquid/lfm-3-1.7b:free"
+min_interval = 4.0
+
+# Paid API.
+# Native Messages API (thinking on by default, so no temperature).
+[claude-haiku]
+provider = "anthropic"
+api_key_env = "ANTHROPIC_API_KEY"
+model = "claude-haiku-5-5"
+
+# NVIDIA free endpoints for large models are slow (~100-200 s per call): long timeout, small grid.
+[deepseek-v4-flash]
+base_url = "https://integrate.api.nvidia.com/v1"
+api_key_env = "NVIDIA_API_KEY"
+model = "deepseek-ai/deepseek-v4.1-flash"
+min_interval = 2.0
+timeout = 300.0
+
+[mistral-large-4]
+base_url = "https://integrate.api.nvidia.com/v1"
+api_key_env = "NVIDIA_API_KEY"
+model = "mistralai/mistral-large-4-1t-a52b"
+min_interval = 2.0
+timeout = 400.0
+
+# Paid API.
+[claude-sonnet]
+provider = "anthropic"
+api_key_env = "ANTHROPIC_API_KEY"
+model = "claude-sonnet-5-5"

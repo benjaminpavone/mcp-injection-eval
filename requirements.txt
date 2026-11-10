@@ -1,0 +1,10 @@
+# Runtime dependencies — pinned to recent releases (checked 2026-11-08)
+fastmcp==4.1.6
+mcp==2.3.0
+openai==3.46.0
+anthropic==2.7.0
+httpx==0.28.1
+certifi==2026.10.23
+python-dotenv==1.2.4
+pandas==3.1.1
+matplotlib==3.11.2
